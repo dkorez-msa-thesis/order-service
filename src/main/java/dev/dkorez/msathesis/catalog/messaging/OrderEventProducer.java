@@ -8,10 +8,10 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 @ApplicationScoped
 public class OrderEventProducer {
     @Inject
-    @Channel("inventory-events")
-    Emitter<InventoryEvent> eventEmitter;
+    @Channel("order-events")
+    Emitter<OrderEvent> eventEmitter;
 
-    public void sendEvent(InventoryEvent event) {
+    public void sendEvent(OrderEvent event) {
         eventEmitter.send(event);
     }
 }

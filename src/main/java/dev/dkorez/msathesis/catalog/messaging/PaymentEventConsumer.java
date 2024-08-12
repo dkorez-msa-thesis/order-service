@@ -13,28 +13,28 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 @ApplicationScoped
-public class OrderEventConsumer {
-    private final Logger logger = LoggerFactory.getLogger(OrderEventConsumer.class);
+public class PaymentEventConsumer {
+    private final Logger logger = LoggerFactory.getLogger(PaymentEventConsumer.class);
 
     private final ObjectMapper objectMapper;
     private final OrderCoordinator orderCoordinator;
 
     @Inject
-    public OrderEventConsumer(OrderCoordinator orderCoordinator, ObjectMapper objectMapper) {
+    public PaymentEventConsumer(OrderCoordinator orderCoordinator, ObjectMapper objectMapper) {
         this.orderCoordinator = orderCoordinator;
         this.objectMapper = objectMapper;
     }
 
-    @Incoming("order-events")
+    @Incoming("payment-events")
     public CompletionStage<Void> processUpdates(String event) {
         try {
             logger.info("incoming order-events: {}", event);
-            InventoryEvent inventoryEvent = objectMapper.readValue(event, InventoryEvent.class);
+            PaymentEvent paymentEvent = objectMapper.readValue(event, PaymentEvent.class);
 
-            switch (inventoryEvent.getType()) {
-                //case INVENTORY_RELEASED ->
-                //case INVENTORY_RESERVED ->
-                case PAYMENT_PROCESSED -> orderCoordinator.updateOrderStatus(inventoryEvent.getOrderId(), "COMPLETED");
+            if (paymentEvent.getType() == PaymentEventType.UPDATED) {
+                // TODO: check event status and update order status
+                String status = paymentEvent.getPayment().getPaymentStatus();
+                orderCoordinator.updateOrderStatus(paymentEvent.getPayment().getOrderId(), status, true);
             }
         } catch (JsonProcessingException e) {
             logger.error("error processing event: {}", e.getMessage(), e);

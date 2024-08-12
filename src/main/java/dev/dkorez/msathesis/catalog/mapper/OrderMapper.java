@@ -3,7 +3,7 @@ package dev.dkorez.msathesis.catalog.mapper;
 import dev.dkorez.msathesis.catalog.entity.OrderDao;
 import dev.dkorez.msathesis.catalog.model.CreateOrderDto;
 import dev.dkorez.msathesis.catalog.model.OrderDto;
-import dev.dkorez.msathesis.catalog.model.OrderItem;
+import dev.dkorez.msathesis.catalog.model.OrderItemDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +13,7 @@ public class OrderMapper {
         if (entity == null)
             return null;
 
-        List<OrderItem> items = entity.getOrderItems() != null ?
+        List<OrderItemDto> items = entity.getOrderItems() != null ?
                 entity.getOrderItems().stream().map(OrderItemMapper::toDto).toList() :
                 Collections.emptyList();
 

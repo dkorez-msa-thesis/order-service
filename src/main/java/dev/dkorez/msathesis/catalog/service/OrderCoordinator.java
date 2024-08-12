@@ -1,14 +1,9 @@
 package dev.dkorez.msathesis.catalog.service;
 
-import dev.dkorez.msathesis.catalog.messaging.InventoryEvent;
-import dev.dkorez.msathesis.catalog.messaging.InventoryEventType;
-import dev.dkorez.msathesis.catalog.messaging.OrderEventProducer;
+import dev.dkorez.msathesis.catalog.messaging.*;
 import dev.dkorez.msathesis.catalog.model.CreateOrderDto;
 import dev.dkorez.msathesis.catalog.model.OrderDto;
-import dev.dkorez.msathesis.catalog.model.OrderItem;
 import jakarta.inject.Inject;
-
-import java.util.List;
 
 public class OrderCoordinator {
     private final OrderService orderService;
@@ -20,36 +15,30 @@ public class OrderCoordinator {
         this.eventProducer = eventProducer;
     }
 
-    public OrderDto createOrder(CreateOrderDto request) {
-        OrderDto response = orderService.createOrder(request);
+    public void createOrder(CreateOrderDto request, boolean sendEvent) {
+        OrderDto order = orderService.createOrder(request);
 
-        List<OrderItem> items = response.getItems();
-        for (OrderItem item: items) {
-            InventoryEvent event = new InventoryEvent();
-            event.setType(InventoryEventType.ORDER_CREATED);
-            event.setProductId(item.getProductId());
-            event.setQuantity(item.getQuantity());
-            event.setOrderId(response.getId());
-
+        if (sendEvent) {
+            OrderEvent event = new OrderEvent(OrderEventType.CREATED, order.getId(), order);
             eventProducer.sendEvent(event);
         }
-
-        return response;
     }
 
-    public OrderDto updateOrderStatus(Long id, String status) {
-        return orderService.updateOrderStatus(id, status);
+    public void updateOrderStatus(Long id, String status, boolean sendEvent) {
+        OrderDto order = orderService.updateOrderStatus(id, status);
+
+        if (sendEvent) {
+            OrderEvent event = new OrderEvent(OrderEventType.UPDATED, id, order);
+            eventProducer.sendEvent(event);
+        }
     }
 
-    public void deleteOrder(Long id) {
+    public void deleteOrder(Long id, boolean sendEvent) {
         orderService.deleteOrder(id);
 
-        InventoryEvent event = new InventoryEvent();
-        event.setType(InventoryEventType.ORDER_CANCELLED);
-        event.setProductId(id);
-        event.setQuantity(null);
-        event.setOrderId(null);
-
-        eventProducer.sendEvent(event);
+        if (sendEvent) {
+            OrderEvent event = new OrderEvent(OrderEventType.CANCELLED, id, null);
+            eventProducer.sendEvent(event);
+        }
     }
 }
