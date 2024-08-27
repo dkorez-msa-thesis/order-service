@@ -5,31 +5,31 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "ORDER_ITEM")
+@Table(name = "CHECKOUT")
 @Data
-public class OrderItemDao {
+public class CheckoutDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    public OrderDao order;
+    @Column(name = "user_id")
+    Long userId;
 
-    @Column(name = "product_id")
-    Long productId;
+    @Column(name = "total_amount")
+    BigDecimal totalAmount;
 
-    @Column(name = "quantity")
-    int quantity;
-
-    @Column(name = "price")
-    BigDecimal price;
+    @Column(name = "status")
+    String status;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
+    public List<CheckoutItemDao> checkoutItems;
 }

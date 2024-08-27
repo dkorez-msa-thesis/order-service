@@ -1,10 +1,10 @@
 package dev.dkorez.msathesis.catalog.mapper;
 
-import dev.dkorez.msathesis.catalog.entity.OrderItemDao;
+import dev.dkorez.msathesis.catalog.entity.CheckoutItemDao;
 import dev.dkorez.msathesis.catalog.model.OrderItemDto;
 
 public class OrderItemMapper {
-    public static OrderItemDto toDto(OrderItemDao entity) {
+    public static OrderItemDto toDto(CheckoutItemDao entity) {
         if (entity == null)
             return null;
 
@@ -16,11 +16,11 @@ public class OrderItemMapper {
         return dto;
     }
 
-    public static OrderItemDao fromDto(OrderItemDto dto) {
+    public static CheckoutItemDao fromDto(OrderItemDto dto) {
         if (dto == null)
             return null;
 
-        OrderItemDao entity = new OrderItemDao();
+        CheckoutItemDao entity = new CheckoutItemDao();
         entity.setProductId(dto.getProductId());
         entity.setQuantity(dto.getQuantity());
         entity.setPrice(dto.getPrice());

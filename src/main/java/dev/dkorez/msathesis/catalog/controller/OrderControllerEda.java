@@ -12,15 +12,15 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 
 @ApplicationScoped
-@Path("api/orders")
+@Path("eda/orders")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class OrderControllerRest {
+public class OrderControllerEda {
     private final OrderCoordinator orderCoordinator;
-    private final static boolean SEND_EVENT = false;
+    private final static boolean SEND_EVENT = true;
 
     @Inject
-    public OrderControllerRest(OrderCoordinator orderCoordinator) {
+    public OrderControllerEda(OrderCoordinator orderCoordinator) {
         this.orderCoordinator = orderCoordinator;
     }
 

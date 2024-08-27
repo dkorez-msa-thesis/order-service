@@ -1,6 +1,6 @@
 package dev.dkorez.msathesis.catalog.mapper;
 
-import dev.dkorez.msathesis.catalog.entity.OrderDao;
+import dev.dkorez.msathesis.catalog.entity.CheckoutDao;
 import dev.dkorez.msathesis.catalog.model.CreateOrderDto;
 import dev.dkorez.msathesis.catalog.model.OrderDto;
 import dev.dkorez.msathesis.catalog.model.OrderItemDto;
@@ -9,12 +9,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class OrderMapper {
-    public static OrderDto toDto(OrderDao entity) {
+    public static OrderDto toDto(CheckoutDao entity) {
         if (entity == null)
             return null;
 
-        List<OrderItemDto> items = entity.getOrderItems() != null ?
-                entity.getOrderItems().stream().map(OrderItemMapper::toDto).toList() :
+        List<OrderItemDto> items = entity.getCheckoutItems() != null ?
+                entity.getCheckoutItems().stream().map(OrderItemMapper::toDto).toList() :
                 Collections.emptyList();
 
         OrderDto dto = new OrderDto();
@@ -27,11 +27,11 @@ public class OrderMapper {
         return dto;
     }
 
-    public static OrderDao fromDto(OrderDto dto) {
+    public static CheckoutDao fromDto(OrderDto dto) {
         if (dto == null)
             return null;
 
-        OrderDao entity = new OrderDao();
+        CheckoutDao entity = new CheckoutDao();
         entity.setUserId(dto.getUserId());
         entity.setTotalAmount(dto.getTotalAmount());
         entity.setStatus(dto.getStatus());
@@ -39,11 +39,11 @@ public class OrderMapper {
         return entity;
     }
 
-    public static OrderDao fromCreateDto(CreateOrderDto dto) {
+    public static CheckoutDao fromCreateDto(CreateOrderDto dto) {
         if (dto == null)
             return null;
 
-        OrderDao entity = new OrderDao();
+        CheckoutDao entity = new CheckoutDao();
         entity.setUserId(dto.getUserId());
         entity.setTotalAmount(dto.getTotalAmount());
         entity.setStatus(dto.getStatus());
