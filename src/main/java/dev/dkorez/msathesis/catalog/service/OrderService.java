@@ -41,7 +41,6 @@ public class OrderService {
         return OrderMapper.toDto(entity);
     }
 
-    //@Transactional
     public void addOrderItems(CheckoutDao order, List<CheckoutItemDao> items) {
         if (order != null) {
             for (CheckoutItemDao item : items) {
