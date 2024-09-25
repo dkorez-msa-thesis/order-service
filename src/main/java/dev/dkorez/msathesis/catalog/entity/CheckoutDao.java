@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class CheckoutDao {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(name = "user_id")

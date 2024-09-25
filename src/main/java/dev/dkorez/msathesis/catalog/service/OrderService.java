@@ -30,7 +30,7 @@ public class OrderService {
     @Transactional
     public OrderDto createOrder(CreateOrderDto order) {
         CheckoutDao entity = OrderMapper.fromCreateDto(order);
-        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setCreatedAt(LocalDateTime.now());
         entity.setUpdatedAt(LocalDateTime.now());
         checkoutRepository.persist(entity);
 
@@ -42,13 +42,16 @@ public class OrderService {
     }
 
     public void addOrderItems(CheckoutDao order, List<CheckoutItemDao> items) {
-        if (order != null) {
-            for (CheckoutItemDao item : items) {
-                item.checkout = order;
-                checkoutItemRepository.persist(item);
-            }
-            checkoutRepository.persist(order);
+        if (order == null) {
+            return;
         }
+
+        for (CheckoutItemDao item : items) {
+            item.checkout = order;
+        }
+        checkoutItemRepository.persist(items);
+        order.setCheckoutItems(items);
+        checkoutRepository.persist(order);
     }
 
     public OrderDto findOrder(Long orderId) {

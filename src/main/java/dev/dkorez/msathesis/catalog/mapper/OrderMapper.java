@@ -23,6 +23,8 @@ public class OrderMapper {
         dto.setTotalAmount(entity.getTotalAmount());
         dto.setStatus(entity.getStatus());
         dto.setItems(items);
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
 
         return dto;
     }
